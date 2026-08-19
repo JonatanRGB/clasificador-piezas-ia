@@ -11,3 +11,9 @@
 (aquí va lo que le agregaste a tu sistema)
 
 Ya logre hacer push en GitHub
+
+este es el procedimiento para hacer push:
+- para hacer un push primero edito mi archivo
+- luego hago git add
+- luego git commit
+- luego git push
