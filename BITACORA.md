@@ -4,7 +4,7 @@
 
 ### Antes de la clase
 
-(aquí van los entregables de los bloques del lunes)
+Realice la actualizacion y complete ya por completo todo el bloque 1 de la semana 1, solamente aun no aparecen hata que ya lo actualice.
 
 ### Avance del proyecto
 
