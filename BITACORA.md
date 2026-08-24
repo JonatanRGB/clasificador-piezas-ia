@@ -17,3 +17,5 @@ este es el procedimiento para hacer push:
 - luego hago git add
 - luego git commit
 - luego git push
+
+ya realice el dirt para codigo, datos y las figuras, completando asi los datos necesarios para dejar ya terminado el bloque 1
