@@ -4,7 +4,8 @@
 
 ### Antes de la clase
 
-Realice la actualizacion y complete ya por completo todo el bloque 1 de la semana 1, solamente aun no aparecen hata que ya lo actualice.
+Realice la actualizacion y complete ya por completo todo el bloque 1 de la semana 1, solamente aun no aparecen hasta que ya lo actualice.
+Ya realice el dirt para codigo, datos y las figuras, completando asi los datos necesarios para dejar ya terminado el bloque 1
 
 ### Avance del proyecto
 
@@ -18,4 +19,3 @@ este es el procedimiento para hacer push:
 - luego git commit
 - luego git push
 
-ya realice el dirt para codigo, datos y las figuras, completando asi los datos necesarios para dejar ya terminado el bloque 1
