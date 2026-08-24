@@ -4,11 +4,8 @@ Proyecto del curso Inteligencia Artificial.
 
 - Alumno: Jonatan Rios Ramos
 - Código: 219400751
-- Dominio: Entorno y repositorio listos
+- Dominio: Eleccion del dominio
 
 ## Descripción
 
-Sistema que lee señales de sensores mientras una pieza pasa frente a ellos,
-clasifica de qué tipo es con un modelo de aprendizaje de máquina y acciona
-un actuador para enrutarla. Crece semana a semana con los temas del curso:
-adquisición, características, clasificación, anomalías y despliegue en PLC.
+sistema que lee señales mediante solorimetria, esto mediante la clasificación de 3 colores, el azul mantendra la posición del elemento que actuara, el rojo realizara el movimineto del equipo, y el color amarillo va a activar un mecanismo secundario.
