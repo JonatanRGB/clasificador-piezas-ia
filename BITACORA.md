@@ -30,6 +30,13 @@ Qué hace el actuador con cada tipo:
 
 -Amarillo: El actuador activa un mecanismo secundario (o realiza un pulso de desvío distinto) para enviar la pieza amarilla a su zona específica de almacenamiento.
 
+## Semana 2 - La primera señal del sensor (U1)
+
+Qué sensor vas a usar y qué tipo de salida tiene.
+voy a usar una celda de carga con modulo Hx711, con una salida de tipo digital serie de dos hilos. Cambie el sensor de color por uno de peso para tomar muestra 
+Tres líneas de ejemplo tal como se van a ver saliendo de tu Arduino, con valores plausibles para tu caso.
+Por qué el Arduino no puede mandar Serial.println("Leyendo...").
+
 ### Avance del proyecto
 
 (aquí va lo que le agregaste a tu sistema)
