@@ -8,4 +8,4 @@ Proyecto del curso Inteligencia Artificial.
 
 ## Descripción
 
-sistema que lee señales mediante solorimetria, esto mediante la clasificación de 3 colores, el azul mantendra la posición del elemento que actuara, el rojo realizara el movimineto del equipo, y el color amarillo va a activar un mecanismo secundario.
+sistema que lee señales mediante peso, las cuales clasifican las señales del sensor en tres diferentes de categorias, las cuales son Alto (para alto peso), mediano y bajo, y esto nos ayuda a poder calcular el peso del contenido de los elementos que deseamos pesar para la tabla.

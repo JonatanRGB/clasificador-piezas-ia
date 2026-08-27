@@ -1,0 +1,37 @@
+#include "HX711.h"
+
+// Pines HX711 (Celda de carga)
+const int DOUT_PIN = A1;
+const int CLK_PIN = A0;
+
+// Pin para el sensor digital (usamos el pin Digital 2)
+const int PIN_SENSOR_DIGITAL = 2; 
+
+HX711 balanza;
+
+void setup() {
+  Serial.begin(115200);
+
+  // Configurar el pin digital como entrada. 
+  // Usa INPUT_PULLUP si tu sensor conmuta a TIERRA (GND), o INPUT si entrega voltaje directo.
+  pinMode(PIN_SENSOR_DIGITAL, INPUT);
+
+  balanza.begin(DOUT_PIN, CLK_PIN);
+  balanza.set_scale(106658.72); // Tu factor de escala
+  balanza.tare(20);             // Calibración de tara inicial
+}
+
+void loop() {
+  // 1. Obtener la lectura del peso
+  float peso = balanza.get_units(3);
+
+  // 2. Leer el estado del sensor digital (Devuelve 1 / HIGH o 0 / LOW)
+  int estadoSensor = digitalRead(PIN_SENSOR_DIGITAL);
+
+  // 3. Enviar a Python en formato "PESO,ESTADO_DIGITAL" (Ej: "0.245,1")
+  Serial.print(peso, 3);
+  Serial.print(",");
+  Serial.println(estadoSensor);
+
+  delay(20); // Pausa breve para estabilidad
+}

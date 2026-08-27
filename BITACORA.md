@@ -34,8 +34,16 @@ Qué hace el actuador con cada tipo:
 
 Qué sensor vas a usar y qué tipo de salida tiene.
 voy a usar una celda de carga con modulo Hx711, con una salida de tipo digital serie de dos hilos. Cambie el sensor de color por uno de peso para tomar muestra 
+
+
 Tres líneas de ejemplo tal como se van a ver saliendo de tu Arduino, con valores plausibles para tu caso.
+13:30:27.47	Peso: 0.272 Kg  Alto	
+13:30:29.81	Peso: 0.258 kg	Medio
+13:30:32.14	Peso: 0.212 kg	Bajo
+
 Por qué el Arduino no puede mandar Serial.println("Leyendo...").
+Se debe principalmente debido a que en python se espera que procese los daros de manera exacta, pero para que funcione necesita que empiece con un caracter especial y que ignore esas lineas. 
+La otra manera mas facil es que Arduino se encargue de mandar los numeros y que python se encargue de imprimir los mensajes, en mi caso yo lo trabajado todo con aduino, y alli me imrime los datos y mensajes.
 
 ### Avance del proyecto
 
