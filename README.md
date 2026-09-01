@@ -4,8 +4,12 @@ Proyecto del curso Inteligencia Artificial.
 
 - Alumno: Jonatan Rios Ramos
 - Código: 219400751
-- Dominio: Eleccion del dominio
+- Dominio: Trabajar en los sensores especificados
 
 ## Descripción
 
 sistema que lee señales mediante peso, las cuales clasifican las señales del sensor en tres diferentes de categorias, las cuales son Alto (para alto peso), mediano y bajo, y esto nos ayuda a poder calcular el peso del contenido de los elementos que deseamos pesar para la tabla.
+
+## Semana 2
+
+en la clase de la semana se empezo a trabajar el funcionamiento de los sensores seleccionados, en mi caso aplique el funcionamiento de una celda de carga la cual mediante la comunicación intermedia de arduino pude conectarme a la celda, la cual gracias a un modulo Hx711 lograria obtener esas señales y clasificarlas segun su peso, para posteriormente graficarlas.

@@ -45,6 +45,16 @@ Por qué el Arduino no puede mandar Serial.println("Leyendo...").
 Se debe principalmente debido a que en python se espera que procese los daros de manera exacta, pero para que funcione necesita que empiece con un caracter especial y que ignore esas lineas. 
 La otra manera mas facil es que Arduino se encargue de mandar los numeros y que python se encargue de imprimir los mensajes, en mi caso yo lo trabajado todo con aduino, y alli me imrime los datos y mensajes.
 
+Bloque 2
+¿Cuánto tarda tu pieza en cruzar frente al sensor? aproximadamente tarda en recorrer la banda de manera hipotetica unos 2 segundos.
+
+Con ese tiempo, ¿qué delay() eliges para tener al menos 20 muestras del evento? Para obtener al menos $N = 20$ muestras durante un tiempo transcurrido de $T = 2.0\text{ s}$, el periodo entre muestras ($T_s$) se calcula dividiendo el tiempo total entre el número deseado de muestras: delay(100);
+
+¿Cuántas muestras te da eso mientras la pieza pasa? Con un retardo de $100\text{ ms}$ entre lecturas, el sistema tomará exactamente 20 muestras mientras la pieza cruce la zona del sensor en los 2 segundos estimados
+
+
+
+
 ### Avance del proyecto
 
 (aquí va lo que le agregaste a tu sistema)
