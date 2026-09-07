@@ -31,6 +31,7 @@ Qué hace el actuador con cada tipo:
 -Amarillo: El actuador activa un mecanismo secundario (o realiza un pulso de desvío distinto) para enviar la pieza amarilla a su zona específica de almacenamiento.
 
 ## Semana 2 - La primera señal del sensor (U1)
+Bloque 1
 
 Qué sensor vas a usar y qué tipo de salida tiene.
 voy a usar una celda de carga con modulo Hx711, con una salida de tipo digital serie de dos hilos. Cambie el sensor de color por uno de peso para tomar muestra 
@@ -51,6 +52,32 @@ Bloque 2
 Con ese tiempo, ¿qué delay() eliges para tener al menos 20 muestras del evento? Para obtener al menos $N = 20$ muestras durante un tiempo transcurrido de $T = 2.0\text{ s}$, el periodo entre muestras ($T_s$) se calcula dividiendo el tiempo total entre el número deseado de muestras: delay(100);
 
 ¿Cuántas muestras te da eso mientras la pieza pasa? Con un retardo de $100\text{ ms}$ entre lecturas, el sistema tomará exactamente 20 muestras mientras la pieza cruce la zona del sensor en los 2 segundos estimados
+
+## Semana 3 - Recolección de datos etiquetados (U2)
+Bloque 1
+
+Las columnas exactas de tu datos.csv, con el nombre de cada una y qué guarda.
+Las columnas en las que se van a clasificar mis datos son las siguienstes: 
+peso: Guarda la lectura física numérica del peso capturada por la celda de carga HX711 (en kilogramos, ej. 0.272).
+
+ventana: Guarda el identificador numérico de la ventana de tiempo o ráfaga de muestras asociada al paso de una pieza específica (ej. 0, 1, 2).
+
+etiqueta: Guarda la categoría asignada a la pieza en minúsculas y sin acentos según los umbrales de peso definidos (ej. bajo, medio, alto).
+
+Tus tres etiquetas, escritas tal como van a aparecer en el archivo (una palabra, minúsculas, sin acentos).
+bajo
+
+medio
+
+alto
+
+Cinco filas de ejemplo de tu tabla, con valores plausibles para tu sensor.
+peso,ventana,etiqueta
+0.002,0,bajo
+0.272,0,bajo
+0.650,1,medio
+0.758,1,medio
+1.345,2,alto
 
 
 

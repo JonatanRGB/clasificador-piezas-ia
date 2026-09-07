@@ -6,29 +6,32 @@ import serial
 import serial.tools.list_ports
 import matplotlib.pyplot as plt
 
-# ==========================================
-# 1. CONFIGURACIÓN DE RUTAS Y CARPETAS
-# ==========================================
-# Subir un nivel desde la carpeta 'codigo' para situarse en 'clasificador-piezas-ia'
+# Detectar sistema operativo para lectura no bloqueante del teclado
+if os.name == 'nt':
+    import msvcrt
+else:
+    import select
+
+## 1. CONFIGURACIÓN DE RUTAS Y CARPETAS
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 DIR_CODIGO = os.path.join(BASE_DIR, 'codigo')
 DIR_DATOS = os.path.join(BASE_DIR, 'datos')
 DIR_FIGURAS = os.path.join(BASE_DIR, 'figuras')
 
-# Asegurar la existencia de las carpetas principales
 for folder in [DIR_CODIGO, DIR_DATOS, DIR_FIGURAS]:
     os.makedirs(folder, exist_ok=True)
 
-# ==========================================
+
 # 2. CONEXIÓN SERIAL CON ARDUINO
-# ==========================================
-def conectar_arduino(puerto=None, baudrate=9600):
-    """Detecta automáticamente el puerto de Arduino si no se especifica."""
+
+def conectar_arduino(puerto=None, baudrate=115200):
+    """Detecta automáticamente el puerto de Arduino y conecta a 115200 baudios."""
     if puerto is None:
         puertos = list(serial.tools.list_ports.comports())
         if not puertos:
-            raise RuntimeError("No se detectaron puertos COM/Serial disponibles. Verifica la conexión del Arduino.")
+            raise RuntimeError("No se detectaron puertos COM/Serial disponibles. Verifica la conexión.")
         puerto = puertos[0].device
         print(f"[+] Puerto COM detectado automáticamente: {puerto}")
     
@@ -38,12 +41,7 @@ def conectar_arduino(puerto=None, baudrate=9600):
 # 3. LÓGICA DE CLASIFICACIÓN Y AUTO-INCREMENTO
 # ==========================================
 def clasificar_peso(peso):
-    """
-    Clasifica el peso recibido (en kg) según las 3 categorías requeridas:
-    - Bajo:  < 0.5 kg
-    - Medio: 0.51 - 1.0 kg
-    - Alto:  >= 1.1 kg
-    """
+    """Clasifica el peso (kg) en las categorías requeridas."""
     if peso < 0.5:
         return "Bajo"
     elif 0.51 <= peso <= 1.0:
@@ -54,9 +52,7 @@ def clasificar_peso(peso):
         return "Transición (0.50 - 0.51 kg)"
 
 def obtener_siguiente_nombre_figura(directorio):
-    """
-    Busca la secuencia existente de senalX.png en 'figuras/' y incrementa +1 el contador.
-    """
+    """Busca la secuencia existente de senalX.png en 'figuras/' e incrementa +1 el contador."""
     patron = re.compile(r"^senal(\d+)\.png$", re.IGNORECASE)
     max_num = 0
     
@@ -71,49 +67,63 @@ def obtener_siguiente_nombre_figura(directorio):
     siguiente_num = max_num + 1
     return os.path.join(directorio, f"senal{siguiente_num}.png")
 
+def tecla_q_presionada():
+    """Detecta la tecla 'Q' de forma no bloqueante en Windows y Linux/Mac."""
+    if os.name == 'nt':
+        if msvcrt.kbhit():
+            tecla = msvcrt.getch().decode('utf-8', errors='ignore')
+            return tecla.upper() == 'Q'
+    else:
+        if sys.stdin in select.select([sys.stdin], [], [], 0.01)[0]:
+            tecla = sys.stdin.readline().strip()
+            return tecla.upper() == 'Q'
+    return False
+
 # ==========================================
 # 4. BUCLE PRINCIPAL DE LECTURA Y GRAFICACIÓN
 # ==========================================
 def main():
-    valores = []
+    valores_peso = []
+    estados_sensor = []
     categorias_conteo = {"Bajo": 0, "Medio": 0, "Alto": 0, "Otros": 0}
     
     try:
-        arduino = conectar_arduino()
-        print("\n=== CAPTURA DE DATOS DESDE ARDUINO (HX711 / CELDA DE CARGA) ===")
-        print("El Arduino iniciará la comunicación por el puerto serie.")
-        print("Presiona la tecla 'Q' y ENTER en cualquier momento para finalizar la corrida.\n")
-        
-        # En sistemas Unix / Linux / Mac vs Windows:
-        import select
+        arduino = conectar_arduino(baudrate=115200)
+        print("\n=== CAPTURA DE DATOS DESDE ARDUINO (HX711 + SENSOR DIGITAL) ===")
+        print("Presiona la tecla 'Q' y ENTER (o presiona Ctrl+C) para finalizar la captura.\n")
         
         while True:
-            # Leer datos de la celda de carga vía Arduino
             if arduino.in_waiting > 0:
                 linea = arduino.readline().decode('utf-8', errors='ignore').strip()
                 if linea:
                     try:
-                        peso = float(linea)
-                        cat = clasificar_peso(peso)
-                        valores.append(peso)
-                        
-                        if cat in categorias_conteo:
-                            categorias_conteo[cat] += 1
-                        else:
-                            categorias_conteo["Otros"] += 1
+                        # Separar los valores numéricos CSV: "PESO,ESTADO" (Ej: "0.245,1")
+                        partes = linea.split(',')
+                        if len(partes) == 2:
+                            peso = float(partes[0])
+                            estado_sensor = int(partes[1])
                             
-                        print(f"Muestra #{len(valores):03d} | Peso: {peso:.3f} kg | Categoría: {cat}")
+                            cat = clasificar_peso(peso)
+                            valores_peso.append(peso)
+                            estados_sensor.append(estado_sensor)
+                            
+                            if cat in categorias_conteo:
+                                categorias_conteo[cat] += 1
+                            else:
+                                categorias_conteo["Otros"] += 1
+                                
+                            print(f"Muestra #{len(valores_peso):03d} | Peso: {peso:.3f} kg | Sensor: {estado_sensor} | Cat: {cat}")
+                    
                     except ValueError:
-                        # Para ignorar encabezados o textos impresos por la librería HX711 en Arduino
+                        # Ignora líneas con datos corruptos o de inicio
                         pass
 
-            # Detectar tecla 'Q' para terminar
-            if sys.stdin in select.select([sys.stdin], [], [], 0.01)[0]:
-                tecla = sys.stdin.readline().strip()
-                if tecla.upper() == 'Q':
-                    print("\n[!] Tecla 'Q' detectada. Deteniendo la captura...")
-                    break
+            if tecla_q_presionada():
+                print("\n[!] Tecla 'Q' detectada. Deteniendo la captura...")
+                break
 
+    except KeyboardInterrupt:
+        print("\n[!] Captura detenida manualmente (Ctrl + C).")
     except Exception as e:
         print(f"Error en la comunicación serial: {e}")
     finally:
@@ -121,29 +131,37 @@ def main():
             arduino.close()
             print("[+] Puerto serial cerrado correctamente.")
 
-    # Generación de reporte y gráfica si hay lecturas
-    if valores:
-        print(f"\nResumen de la corrida: Total lecturas = {len(valores)}")
+    # Generación de reporte y gráfica
+    if valores_peso:
+        print(f"\nResumen de la corrida: Total lecturas = {len(valores_peso)}")
         print(f"  - Bajo (<0.5 kg):    {categorias_conteo['Bajo']}")
         print(f"  - Medio (0.51-1.0 kg): {categorias_conteo['Medio']}")
         print(f"  - Alto (>=1.1 kg):   {categorias_conteo['Alto']}")
 
-        # Crear Gráfica de la Señal
-        plt.figure(figsize=(10, 5))
-        plt.plot(valores, color='#2b5c8f', linewidth=1.8, marker='o', markersize=4, label='Lectura Celda de Carga (kg)')
+        # Crear Gráfica con dos subplots (Peso y Estado del Sensor)
+        fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(10, 7), sharex=True, gridspec_kw={'height_ratios': [3, 1]})
         
-        # Líneas de umbral de clasificación
-        plt.axhline(y=0.5, color='#e74c3c', linestyle='--', linewidth=1.2, label='Umbral Bajo (<0.5 kg)')
-        plt.axhline(y=1.0, color='#f39c12', linestyle='--', linewidth=1.2, label='Umbral Medio (1.0 kg)')
-        plt.axhline(y=1.1, color='#2ecc71', linestyle='--', linewidth=1.2, label='Umbral Alto (>=1.1 kg)')
-        
-        plt.title('Señal de Peso en Tiempo Real - Celda de Carga HX711', fontsize=12, fontweight='bold')
-        plt.xlabel('Número de Muestra / Tiempo', fontsize=10)
-        plt.ylabel('Peso Registrado (kg)', fontsize=10)
-        plt.grid(True, linestyle=':', alpha=0.6)
-        plt.legend(loc='upper right')
-        
-        # Guardado autoincremental en carpeta figuras/
+        # Subplot 1: Peso
+        ax1.plot(valores_peso, color='#2b5c8f', linewidth=1.8, marker='o', markersize=3, label='Peso Celda de Carga (kg)')
+        ax1.axhline(y=0.5, color='#e74c3c', linestyle='--', linewidth=1.2, label='Umbral Bajo (<0.5 kg)')
+        ax1.axhline(y=1.0, color='#f39c12', linestyle='--', linewidth=1.2, label='Umbral Medio (1.0 kg)')
+        ax1.axhline(y=1.1, color='#2ecc71', linestyle='--', linewidth=1.2, label='Umbral Alto (>=1.1 kg)')
+        ax1.set_title('Señal de Peso y Sensor Digital en Tiempo Real', fontsize=12, fontweight='bold')
+        ax1.set_ylabel('Peso Registrado (kg)', fontsize=10)
+        ax1.grid(True, linestyle=':', alpha=0.6)
+        ax1.legend(loc='upper right')
+
+        # Subplot 2: Estado del Sensor Digital (0 o 1)
+        ax2.step(range(len(estados_sensor)), estados_sensor, color='#8e44ad', where='post', linewidth=1.5, label='Estado Sensor Digital')
+        ax2.set_xlabel('Número de Muestra', fontsize=10)
+        ax2.set_ylabel('Estado (0/1)', fontsize=10)
+        ax2.set_yticks([0, 1])
+        ax2.grid(True, linestyle=':', alpha=0.6)
+        ax2.legend(loc='upper right')
+
+        plt.tight_layout()
+
+        # Guardado autoincremental
         ruta_guardado = obtener_siguiente_nombre_figura(DIR_FIGURAS)
         plt.savefig(ruta_guardado, dpi=300, bbox_inches='tight')
         print(f"\n[+] Gráfica guardada exitosamente en: {ruta_guardado}")
