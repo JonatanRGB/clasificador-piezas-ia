@@ -79,12 +79,27 @@ peso,ventana,etiqueta
 0.758,1,medio
 1.345,2,alto
 
+Bloque 2
+
+Cuántas ventanas por clase vas a capturar.
+Capturaré 10 ventanas por clase, dando un total de 30 ventanas para todo el dataset (10 para bajo, 10 para medio y 10 para alto).  
+Como cada ventana registra 20 muestras, tendré un total de 200 lecturas puntuales de peso por categoría.  
+
+En qué orden.
+Lo haré de forma intercalada: bajo, medio, alto
+
+Cómo vas a mantener pareja la velocidad de la mano, en concreto: qué vas a marcar, medir o fijar.
+Marcaré dos líneas en la plataforma separadas a una distancia fija, la pieza iniciará el recorrido en la marca A con el primer pulso sonoro y deberá cruzar la marca B exactamente al escuchar el segundo pulso.
+
+A qué distancia del sensor va a pasar la pieza.
+La pieza pasará en contacto físico directo (0 cm), deslizándose centrada sobre la base de la celda de carga. Al ser un sensor mecánico (HX711), es indispensable que la pieza apoye todo su peso directamente sobre la plataforma durante su paso.
 
 
 
 ### Avance del proyecto
 
-(aquí va lo que le agregaste a tu sistema)
+Realice pruebas en la maquina de desgaste del laboratorio de superficies y triboligia, debido a que alli es donde empece a trabajar con un sistema parecido al que estoy trabajando actualmente co esta celda de carga
+
 
 Ya logre hacer push en GitHub
 
