@@ -94,6 +94,8 @@ Marcaré dos líneas en la plataforma separadas a una distancia fija, la pieza i
 A qué distancia del sensor va a pasar la pieza.
 La pieza pasará en contacto físico directo (0 cm), deslizándose centrada sobre la base de la celda de carga. Al ser un sensor mecánico (HX711), es indispensable que la pieza apoye todo su peso directamente sobre la plataforma durante su paso.
 
+## Aclaracion de dudas en clase sobre el funcionamiento y correccion de las tablas para la recopilacion de datos
+se definio como corregir las señales, ademas de como podremos diferenciar ruido de anomalias y calcular nuestros datos estadisticos
 
 
 ### Avance del proyecto
