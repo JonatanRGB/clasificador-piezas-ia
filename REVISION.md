@@ -23,3 +23,6 @@ Tu `datos/datos.csv` tiene un renglón corrupto: la fila 13 dice literalmente `1
 
 ### Nota rápida (2026-09-14) - s04
 Tu bloque 1 tiene un problema importante: `codigo/limpiar.py` filtra las columnas `valor`, `t` y `etiqueta`, pero tu `datos/datos.csv` real tiene columnas distintas (`peso,ventana,etiqueta`) y además sigue con el mismo renglón corrupto que te comenté la semana pasada (la fila `1.252,2,Alto3,0,0.0,alto`, dos filas pegadas sin salto de línea). Con ese desajuste de columnas el script no puede estar corriendo sobre tus datos reales; probablemente lo adaptaste de un ejemplo sin ajustarlo al tuyo. Eso explica que no haya bloque 2 ni sección de Semana 4 en tu `BITACORA.md` (salta directo a la nota de "Aclaración de dudas en clase"). Antes de seguir: corrige la fila corrupta de `datos.csv` y ajusta `limpiar.py` a tus columnas reales (`peso`, no `valor`).
+
+### Nota rápida (2026-09-21) - s05
+No veo commits de la semana 05 (`s05 bloque 1`/`s05 bloque 2`). Si tuviste un problema, cuéntamelo para que quede en la bitácora.
