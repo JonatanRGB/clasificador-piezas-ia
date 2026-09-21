@@ -103,7 +103,7 @@ se definio como corregir las señales, ademas de como podremos diferenciar ruido
 
 
 ## correciones de REVISION.md 
-corregi los datos corruptos de la captura de datos, ademas de ajustar el formato de las ventanas que se genere en la semana 3 para que asi los datos generados en la semana 4 no se corrompan.
+corregi los datos corruptos de la captura de datos, ademas de ajustar el formato de las ventanas que se genere en la semana 3 para que asi los datos generados en la semana 4 no se corrompan
 
 
 ### Avance del proyecto
