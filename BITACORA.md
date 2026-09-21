@@ -53,6 +53,8 @@ Con ese tiempo, ¿qué delay() eliges para tener al menos 20 muestras del evento
 
 ¿Cuántas muestras te da eso mientras la pieza pasa? Con un retardo de $100\text{ ms}$ entre lecturas, el sistema tomará exactamente 20 muestras mientras la pieza cruce la zona del sensor en los 2 segundos estimados
 
+Nota de cambio de dominio: Se decidió modificar el sensor del proyecto, pasando del sensor de color (detector de tono azul/rojo/amarillo) a una celda de carga con amplificador HX711 para clasificación por peso. Este cambio se realizó para mejorar la repetibilidad y estabilidad de las mediciones físicas de las piezas
+
 ## Semana 3 - Recolección de datos etiquetados (U2)
 Bloque 1
 
@@ -79,6 +81,8 @@ peso,ventana,etiqueta
 0.758,1,medio
 1.345,2,alto
 
+Nota: el error de por que se sobre escribio el codigo fue debido a que se empezo a correr el IDE de arduino junto al ultimo dato que se corrio, pero al eliminar ese segmento corrupto ya no deberia de ejecutar ese error.
+
 Bloque 2
 
 Cuántas ventanas por clase vas a capturar.
@@ -96,6 +100,10 @@ La pieza pasará en contacto físico directo (0 cm), deslizándose centrada sobr
 
 ## Aclaracion de dudas en clase sobre el funcionamiento y correccion de las tablas para la recopilacion de datos
 se definio como corregir las señales, ademas de como podremos diferenciar ruido de anomalias y calcular nuestros datos estadisticos
+
+
+## correciones de REVISION.md 
+corregi los datos corruptos de la captura de datos, ademas de ajustar el formato de las ventanas que se genere en la semana 3 para que asi los datos generados en la semana 4 no se corrompan.
 
 
 ### Avance del proyecto

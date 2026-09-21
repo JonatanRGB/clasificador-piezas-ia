@@ -8,8 +8,8 @@ import pandas as pd
 # ==========================================
 # CONFIGURACIÓN GENERAL
 # ==========================================
-BAUDIOS = 115200          # Debe coincidir con Serial.begin(115200) de Sensor.ino
-N_MUESTRAS = 20           # Muestras por ventana (2 segundos a 100ms por muestra)
+BAUDIOS = 9600            # Coincide con Serial.begin(9600) de tu Arduino
+N_MUESTRAS = 20           # Muestras por ventana para la celda de carga
 ARCHIVO = 'datos/datos.csv'
 
 # Asegurar la existencia de la carpeta datos/
@@ -44,11 +44,11 @@ n_ventanas = int(input("¿Cuántas ventanas vas a capturar?: "))
 ser = serial.Serial(PUERTO, BAUDIOS, timeout=1)
 time.sleep(2)  # El Arduino se reinicia al abrir el puerto
 
-# 5. Apertura del archivo en modo 'a' (append) para no borrar lo capturado antes
+# 5. Apertura del archivo en modo 'a' (append) para no sobrescribir
 archivo = open(ARCHIVO, 'a', newline='', encoding='utf-8')
 escritor = csv.writer(archivo)
 
-# Escribir la fila de encabezados si el archivo está vacío
+# Escribir la fila de encabezados estandarizada si el archivo está nuevo/vacío
 if not archivo_existe:
     escritor.writerow(['ventana', 't', 'valor', 'etiqueta'])
     archivo.flush()
@@ -57,26 +57,25 @@ if not archivo_existe:
 try:
     for i in range(n_ventanas):
         input(f"\nVentana {ventana} ({etiqueta}). Enter y pasa la pieza...")
-        ser.reset_input_buffer()  # Tira lo que se acumuló mientras esperabas
+        ser.reset_input_buffer()  # Limpia lecturas viejas del buffer
         
         t = 0
         while t < N_MUESTRAS:
             linea = ser.readline().decode('utf-8', errors='ignore').strip()
             if linea:
                 try:
-                    # Dado que Sensor.ino envía "peso,estadoSensor" (ej. "0.272,1"),
-                    # tomamos el primer valor correspondiente al peso
+                    # Extrae únicamente el número enviado por Arduino
                     partes = linea.split(',')
                     valor = float(partes[0])
                     
-                    # Escribir la fila exacta: ventana, t, valor, etiqueta
+                    # Escribe la estructura oficial requerida por el curso
                     escritor.writerow([ventana, t, valor, etiqueta])
                     archivo.flush()
                     
                     t += 1
                     print(f"  -> Muestra {t}/{N_MUESTRAS} | Valor: {valor:.3f} kg", end='\r')
                 except ValueError:
-                    # Ignorar encabezados o textos impresos por error
+                    # Ignora texto sucio o estampas de tiempo si las hay
                     continue
 
         print(f"\n  ✓ {N_MUESTRAS} muestras guardadas en ventana {ventana}")
