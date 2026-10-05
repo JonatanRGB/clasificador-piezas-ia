@@ -105,6 +105,9 @@ se definio como corregir las señales, ademas de como podremos diferenciar ruido
 ## correciones de REVISION.md 
 corregi los datos corruptos de la captura de datos, ademas de ajustar el formato de las ventanas que se genere en la semana 3 para que asi los datos generados en la semana 4 no se corrompan
 
+## volver a hacer las correcciones
+al parecer la razon por la que mis datos salian corruptos en 0 fue debido a que el anterior modulo hx711 se habia quemado en un de las primeras purueba y ahora el modulo actual si funciona y me genera las ventanas con los datos de peso que deben de ser, solamente debo de corregir la entrada de la clasificacion de datos para que uncione correctamente todos los datos y los pueda depurar para la parte de limpiar que ya tenia hecha, pero debido a que estaban mal los datos la volvere a hacer
+
 
 ### Avance del proyecto
 

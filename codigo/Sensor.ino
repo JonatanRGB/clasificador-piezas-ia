@@ -16,6 +16,8 @@ void setup() {
 
   balanza.begin(DOUT_PIN, CLK_PIN);
   balanza.set_scale(106658.72);
+
+  
   balanza.tare(20);
 }
 
