@@ -108,6 +108,19 @@ corregi los datos corruptos de la captura de datos, ademas de ajustar el formato
 ## volver a hacer las correcciones
 al parecer la razon por la que mis datos salian corruptos en 0 fue debido a que el anterior modulo hx711 se habia quemado en un de las primeras purueba y ahora el modulo actual si funciona y me genera las ventanas con los datos de peso que deben de ser, solamente debo de corregir la entrada de la clasificacion de datos para que uncione correctamente todos los datos y los pueda depurar para la parte de limpiar que ya tenia hecha, pero debido a que estaban mal los datos la volvere a hacer
 
+## Semana 4 - Limpieza y normalización de señales (U2)
+
+Bloque 1
+¿Qué ruido ves y de dónde crees que viene?
+En la parte estable la lectura sube y baja alrededor de ±1 g entre muestras. Es ruido eléctrico del HX711 y de los cables de la celda.
+También hay lecturas sueltas absurdas (8 kg o -1.5 kg) que son errores de lectura, no ruido.
+
+¿Cuál es el rango físico de tu sensor y qué valores descartaste?
+La celda mide de 0 a 1 kg; por la tara salen lecturas un poco
+negativas, así que acepto de -0.05 a 1.0 kg. Eliminé 17 lecturas, une en cada una de 17 ventanas, así que ninguna ventana se perdió completa.
+
+¿Qué tamaño de filtro usaste y por qué?
+Media móvil de k = 3 muestras (60 ms a 50 Hz). El pico al caer dura unos 100 ms; con k más grande se aplasta. Se aplica por ventana (groupby) para no mezclar ventanas, y los NaN de las orillas se rellenan con el valor válido más cercano.
 
 ### Avance del proyecto
 

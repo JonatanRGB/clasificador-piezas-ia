@@ -8,21 +8,21 @@ import pandas as pd
 # ==========================================
 # CONFIGURACIÓN GENERAL
 # ==========================================
-BAUDIOS = 9600            # Coincide con Serial.begin(9600) de tu Arduino
-N_MUESTRAS = 20           # Muestras por ventana para la celda de carga
+BAUDIOS = 115200          # Velocidad sincronizada con Arduino
+N_MUESTRAS = 200          # <-- 200 muestras a 100Hz = 2 segundos exactos
 ARCHIVO = 'datos/datos.csv'
 
-# Asegurar la existencia de la carpeta datos/
+# Asegurar la existencia de la carpeta 'datos'
 os.makedirs('datos', exist_ok=True)
 
-# 1. Detección automática del puerto COM del Arduino
+# 1. Detección automática del puerto COM
 puertos = list(serial.tools.list_ports.comports())
 if not puertos:
-    raise RuntimeError("No se detectaron puertos COM/Serial disponibles. Verifica la conexión de tu Arduino.")
+    raise RuntimeError("No se detectaron puertos COM. Verifica la conexión.")
 PUERTO = puertos[0].device
-print(f"[+] Puerto COM detectado automáticamente: {PUERTO}")
+print(f"[+] Puerto COM detectado: {PUERTO}")
 
-# 2. Averiguar en qué número de ventana te quedaste la vez pasada
+# 2. Averiguar última ventana capturada
 archivo_existe = os.path.exists(ARCHIVO) and os.path.getsize(ARCHIVO) > 0
 ventana = 0
 
@@ -31,54 +31,60 @@ if archivo_existe:
         df = pd.read_csv(ARCHIVO)
         if 'ventana' in df.columns and not df.empty:
             ventana = int(df['ventana'].max()) + 1
-            print(f"[+] Reanudando capturas desde la ventana número: {ventana}")
-    except Exception as e:
-        print(f"[!] No se pudo leer la última ventana de {ARCHIVO}: {e}")
+            print(f"[+] Reanudando en ventana número: {ventana}")
+    except Exception:
         ventana = 0
 
-# 3. Solicitar datos de la captura al usuario
-etiqueta = input("Etiqueta de esta pieza (bajo, medio, alto): ").strip().lower()
+# 3. Solicitar datos de etiqueta y cantidad de ventanas
+etiqueta = input("Etiqueta de esta pieza (ej. madera, metal, plastico): ").strip().lower()
 n_ventanas = int(input("¿Cuántas ventanas vas a capturar?: "))
 
-# 4. Conexión Serial con Arduino
+# 4. Conexión Serial
 ser = serial.Serial(PUERTO, BAUDIOS, timeout=1)
-time.sleep(2)  # El Arduino se reinicia al abrir el puerto
+time.sleep(2) # Espera a que Arduino se reinicie
 
-# 5. Apertura del archivo en modo 'a' (append) para no sobrescribir
 archivo = open(ARCHIVO, 'a', newline='', encoding='utf-8')
 escritor = csv.writer(archivo)
 
-# Escribir la fila de encabezados estandarizada si el archivo está nuevo/vacío
+# Escribir encabezados si el archivo es nuevo
 if not archivo_existe:
     escritor.writerow(['ventana', 't', 'valor', 'etiqueta'])
     archivo.flush()
 
-# 6. Bucle principal de adquisición
+# 5. Captura a máxima velocidad (Uso de RAM)
 try:
     for i in range(n_ventanas):
         input(f"\nVentana {ventana} ({etiqueta}). Enter y pasa la pieza...")
-        ser.reset_input_buffer()  # Limpia lecturas viejas del buffer
+        ser.reset_input_buffer()
         
+        datos_en_ram = []  # Almacena temporalmente para no frenar la lectura
         t = 0
+        
+        tiempo_inicio = time.time()
+        
         while t < N_MUESTRAS:
             linea = ser.readline().decode('utf-8', errors='ignore').strip()
             if linea:
                 try:
-                    # Extrae únicamente el número enviado por Arduino
+                    # Arduino envía el formato: "0.450,0"
                     partes = linea.split(',')
-                    valor = float(partes[0])
+                    valor = float(partes[0]) 
                     
-                    # Escribe la estructura oficial requerida por el curso
-                    escritor.writerow([ventana, t, valor, etiqueta])
-                    archivo.flush()
-                    
+                    # Estructura estricta: ventana, t, valor, etiqueta
+                    datos_en_ram.append([ventana, t, valor, etiqueta])
                     t += 1
-                    print(f"  -> Muestra {t}/{N_MUESTRAS} | Valor: {valor:.3f} kg", end='\r')
                 except ValueError:
-                    # Ignora texto sucio o estampas de tiempo si las hay
                     continue
 
-        print(f"\n  ✓ {N_MUESTRAS} muestras guardadas en ventana {ventana}")
+        tiempo_fin = time.time()
+        
+        # Guardado en disco de una sola vez
+        escritor.writerows(datos_en_ram)
+        archivo.flush()
+        
+        tiempo_total = tiempo_fin - tiempo_inicio
+        print(f"  ✓ {N_MUESTRAS} muestras capturadas en {tiempo_total:.2f} segundos")
+        
         ventana += 1
 
 finally:
