@@ -31,3 +31,6 @@ En esta semana revisé la señal en frecuencia con la FFT. Muestreo a 50 Hz, as�
 
 ## Semana 7
 En esta semana entrené el clasificador. Separé 90 ventanas para entrenar y 30 para probar. Probé kNN, que acertó el 96.7 %, y un árbol de decisión, que acertó el 100 % en la prueba. Me quedé con el árbol porque acertó más y se puede entender: solo hace 3 preguntas. El modelo quedó guardado en `modelo.pkl`. Sale tan alto porque los tres materiales pesan muy diferente (14, 40 y 55 g).
+
+## Semana 8
+En esta semana comparé el árbol con dos redes neuronales (de 10 y de 50 neuronas). Las tres acertaron el 100 %, así que me quedé con el árbol porque es más simple. También hice el bucle de control: el Arduino manda el peso, Python decide qué material es y le contesta con una letra para prender un LED: rojo para resina (A), amarillo para MDF (B) y azul para PLA (C).

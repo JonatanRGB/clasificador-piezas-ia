@@ -269,6 +269,44 @@ Nada en prueba. El riesgo está en el MDF más ligero, que se acerca a resina.
 Si el resultado es muy bueno, ¿qué evidencia hay de que no es fuga de datos?
 Quité la columna ventana, el escalador se ajustó solo con  entrenamiento y la prueba nunca se usó para entrenar. El 100 %   explica físicamente: los materiales pesan 14, 40 y 55 g y el ruido esnde ±1 g. El riesgo real es que todo se capturó igual (simulado); lo veré en la banda.
 
+## Semana 8 - Redes neuronales y primer bucle de control (U2)
+
+Bloque 1
+Tabla: modelo semana 7, red de 10 y red de 50 neuronas.
+
+| Modelo | Entrenamiento | Prueba |
+|---|---|---|
+| Árbol (semana 7) | 1.000 | 1.000 |
+| Red de 10 neuronas | 1.000 | 1.000 |
+| Red de 50 neuronas | 1.000 | 1.000 |
+
+¿Qué modelo se queda y por qué?
+El árbol: empata con las redes y es más simple y explicable.
+
+¿Por qué la red no necesariamente gana con 90 ejemplos?
+Porque no hay más patrón que aprender: el árbol ya separa perfecto con 3 preguntas, y una red de 50 neuronas tiene muchos más parámetros que ejemplos, así que puede memorizar en vez de generalizar.
+
+Bloque 2
+Tabla de acciones (carácter, clase, efecto físico, justificación).
+
+| Carácter | Clase | Efecto físico | Por qué |
+|---|---|---|---|
+| A | resina | se prende el LED rojo (pin 5) | un color distinto por material, fácil de ver en el video |
+| B | mdf | se prende el LED amarillo (pin 6) | — |
+| C | pla | se prende el LED azul (pin 7) | — |
+| 0 | reposo | se apagan los LEDs | después de 0.5 s |
+
+     Como actuador uso 3 LEDs en lugar del servo: así cada decisión se ve
+     con un color y no necesito montar el mecanismo de desvío.
+
+¿Cómo evitas que el bucle procese distinto que el entrenamiento?
+Convertí limpiar.py y features.py en funciones (limpiar_ventana y calcular_features) que control.py importa. Así el bucle limpia exactamente igual (evita el training-serving skew). Comprobé que datos_limpios.csv sale idéntico que antes del cambio.
+
+### Avance del proyecto
+Tabla de acciones.   (la misma de arriba)
+Exactitud en vivo contra la del CSV. 95%
+Problemas al conectar todo y cómo los resolví.
+
 Ya logre hacer push en GitHub
 
 este es el procedimiento para hacer push:

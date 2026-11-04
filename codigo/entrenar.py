@@ -1,5 +1,6 @@
 """
 Semana 7: entrena el clasificador, lo evalua y guarda modelo.pkl
+Semana 8 (bloque 1): compara contra redes neuronales de 10 y 50 neuronas.
 Uso (desde la raiz del repo):  python codigo/entrenar.py
 """
 import os
@@ -10,6 +11,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.tree import DecisionTreeClassifier, export_text
+from sklearn.neural_network import MLPClassifier
 from sklearn.metrics import accuracy_score, confusion_matrix, ConfusionMatrixDisplay
 
 features = pd.read_csv('datos/features.csv')
@@ -31,6 +33,8 @@ X_test_esc = escalador.transform(X_test)      # transform, NO fit_transform
 candidatos = {
     'kNN (k=5)': KNeighborsClassifier(n_neighbors=5),
     'Arbol (max_depth=3)': DecisionTreeClassifier(max_depth=3, random_state=42),
+    'Red 10 neuronas': MLPClassifier(hidden_layer_sizes=(10,), max_iter=2000, random_state=42),
+    'Red 50 neuronas': MLPClassifier(hidden_layer_sizes=(50,), max_iter=2000, random_state=42),
 }
 
 print(f"\n{'Modelo':<22}{'Exact. entrenamiento':>22}{'Exact. prueba':>16}")
@@ -40,7 +44,8 @@ for nombre, m in candidatos.items():
     te = accuracy_score(y_test, m.predict(X_test_esc))
     print(f"{nombre:<22}{tr:>22.3f}{te:>16.3f}")
 
-# Me quedo con el arbol: mejor exactitud en prueba que kNN y se puede leer (son 3 preguntas).
+# Me quedo con el arbol: 100 % en prueba igual que las redes, pero se puede leer
+# (son 3 preguntas) y no necesita escalado. Las redes no ganan nada con 90 ejemplos.
 ELEGIDO = 'Arbol (max_depth=3)'
 modelo = candidatos[ELEGIDO]
 print("\nReglas que aprendio el arbol:")
