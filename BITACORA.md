@@ -225,6 +225,50 @@ Dataset congelado, versión 1: 7 características, 120 ventanas, 40 por clase.
 Predicción de separación con el conjunto final.
 Las tres clases se van a separar casi perfecto, porque la meseta ya no se encima.
 
+## Semana 7 - Entrenamiento del clasificador (U2)
+
+Bloque 1
+Número de ejemplos de entrenamiento y de prueba.
+120 ventanas -> 90 de entrenamiento y 30 de prueba (75/25, estratificado: 10 de prueba por clase).
+
+Con qué algoritmo empiezas y por qué.
+kNN (k = 5), porque mis clases se separan por distancia (el peso).Lo comparo con un árbol de decisión porque se puede leer.
+
+¿Por qué un modelo con 100 % en entrenamiento puede ser inútil?
+Porque pudo memorizar los ejemplos; lo que importa es cómo le va con datos que nunca vio.
+
+Bloque 2
+Exactitud en prueba.
+ R:  (pega la tabla)
+
+| Modelo | Entrenamiento | Prueba |
+|---|---|---|
+| kNN (k=5) | 1.000 | 0.967 |
+| Árbol (max_depth=3) | 1.000 | 1.000 |
+
+El par de clases que más se confunde.
+El árbol no confunde nada. El kNN confundió una ventana de MDF con resina (el MDF más ligero queda cerca de la resina más pesada).
+
+
+¿Coincide con tu predicción de la semana 6?
+Sí, predije separación casi perfecta.
+
+### Avance del proyecto
+
+ P1: Algoritmo elegido y por qué ganó.
+ R:  Árbol de decisión (max_depth = 3): mejor en prueba que kNN y se puede
+     leer. Aprendió 3 preguntas: si banda_alta es baja -> PLA; si no, si
+     la media es baja -> resina; si no -> MDF.
+
+Exactitud de entrenamiento y de prueba (y si hay diferencia grande).
+1.000 y 1.000; no hay diferencia.
+
+¿Qué confunde el modelo y por qué?
+Nada en prueba. El riesgo está en el MDF más ligero, que se acerca a resina.
+
+Si el resultado es muy bueno, ¿qué evidencia hay de que no es fuga de datos?
+Quité la columna ventana, el escalador se ajustó solo con  entrenamiento y la prueba nunca se usó para entrenar. El 100 %   explica físicamente: los materiales pesan 14, 40 y 55 g y el ruido esnde ±1 g. El riesgo real es que todo se capturó igual (simulado); lo veré en la banda.
+
 Ya logre hacer push en GitHub
 
 este es el procedimiento para hacer push:

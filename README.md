@@ -28,3 +28,6 @@ En esta semana saqué las características de cada ventana, o sea, unos cuantos 
 
 ## Semana 6
 En esta semana revisé la señal en frecuencia con la FFT. Muestreo a 50 Hz, así que lo más rápido que puedo ver son 25 Hz. Como la señal es casi un escalón (cae y se queda), la frecuencia casi no ayudó. Solo me quedé con la energía de 3 a 25 Hz, que viene del rebote cuando cae la pieza. Al final quedaron 7 características y dejé el archivo `datos/features.csv` como versión final (120 ventanas, 40 de cada material).
+
+## Semana 7
+En esta semana entrené el clasificador. Separé 90 ventanas para entrenar y 30 para probar. Probé kNN, que acertó el 96.7 %, y un árbol de decisión, que acertó el 100 % en la prueba. Me quedé con el árbol porque acertó más y se puede entender: solo hace 3 preguntas. El modelo quedó guardado en `modelo.pkl`. Sale tan alto porque los tres materiales pesan muy diferente (14, 40 y 55 g).
