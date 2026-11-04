@@ -122,7 +122,28 @@ negativas, así que acepto de -0.05 a 1.0 kg. Eliminé 17 lecturas, une en cada 
 ¿Qué tamaño de filtro usaste y por qué?
 Media móvil de k = 3 muestras (60 ms a 50 Hz). El pico al caer dura unos 100 ms; con k más grande se aplasta. Se aplica por ventana (groupby) para no mezclar ventanas, y los NaN de las orillas se rellenan con el valor válido más cercano.
 
+Bloque 2
+¿Cuánto se movió la línea base entre la primera y la última ventana?
+La primera empezó en -0.23 g y la última en -1.10 g; en toda la sesión estuvo entre -1.90 y 1.67 g. Es poco frente a mis piezas (14 a 55 g), pero en el PLA ya es más del 10 %, por eso la corrijo. La calculo con las 3 primeras muestras de cada ventana (antes de que caiga el material) y antes del filtro, porque la media móvil mezcla la muestra 2 con el inicio de la caída.
+
+¿Qué normalización elegiste y por qué?
+Min-max global: x' = (x - x_min)/(x_max - x_min), con x_min = -1.73 g y x_max = 76.53 g, guardados en datos/normalizacion.json para usar los mismos en producción. Es global porque si normalizara cada ventana sola, todas llegarían a 1 y se perdería la diferencia de peso, que es lo que distingue a mis materiales.
+
+Después de limpiar, ¿las ventanas de la misma clase se parecen más?
+Sí: desaparece el pico atípico, la base queda en 0 y baja el ruido. ![limpieza](figuras/limpieza.png
+
 ### Avance del proyecto
+
+Pasos de limpieza en orden y por qué.
+Quitar lecturas imposibles (primero, porque un 8 kg dentro del filtro contamina a sus vecinas). 2) Medir la línea base. 3) Media móvil por ventana. 4) Restar la base. 5) Normalizar y guardar x_min y x_max.
+
+¿Las ventanas de la misma clase son más parecidas? (figura galería)
+[galeria](figuras/galeria.png) Los tres materiales quedan en niveles separados (PLA ≈ 0.20, resina ≈ 0.53, MDF ≈ 0.72) y no se enciman.
+
+Ventanas descartadas. Ninguna completa; siguen 40 por clase.
+
+¿Qué harás si dos clases se enciman?
+Revisaría cómo suelto la pieza (altura, posición) y repetiría esas capturas; si siguen encimadas, usaría otra característica además del peso o un segundo sensor.
 
 Realice pruebas en la maquina de desgaste del laboratorio de superficies y triboligia, debido a que alli es donde empece a trabajar con un sistema parecido al que estoy trabajando actualmente co esta celda de carga
 
