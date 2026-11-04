@@ -26,3 +26,9 @@ Tu bloque 1 tiene un problema importante: `codigo/limpiar.py` filtra las columna
 
 ### Nota rápida (2026-09-21) - s05
 No veo commits de la semana 05 (`s05 bloque 1`/`s05 bloque 2`). Si tuviste un problema, cuéntamelo para que quede en la bitácora.
+
+### Nota rápida (2026-10-19) - s06
+No veo commits de la semana 06 (`s06 bloque 1`/`s06 bloque 2`). Si tuviste un problema, cuéntamelo para que quede en la bitácora.
+
+### Nota rápida (2026-10-19) - s07
+No veo commits de la semana 07 (`s07 bloque 1`/`s07 bloque 2`). Si tuviste un problema, cuéntamelo para que quede en la bitácora.
