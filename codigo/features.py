@@ -1,18 +1,27 @@
 """
-Semana 5: caracteristicas en el dominio del tiempo -> datos/features.csv (una fila por ventana)
+Caracteristicas por ventana -> datos/features.csv (una fila por ventana)
+Semana 5: dominio del tiempo.  Semana 6: dominio de la frecuencia (FFT).
+calcular_features() la usan tambien control.py, pca.py, clustering.py y autoencoder.py,
+para que todos calculen exactamente lo mismo.
 Uso (desde la raiz del repo):  python codigo/features.py
 """
 import os
 import numpy as np
 import pandas as pd
 
+FS = 50.0           # Hz (200 muestras en 4 s). Nyquist = 25 Hz
+BANDA_CORTE = 3.0   # Hz: abajo esta el escalon del peso, arriba el rebote del impacto
 UMBRAL = 0.05       # valor normalizado a partir del cual "hay pieza" (para duracion)
 
-# Las calculo todas, pero estas NO entran al modelo (ver BITACORA semana 5):
+# Las calculo todas, pero estas NO entran al modelo (ver BITACORA semanas 5 y 6):
 DESCARTADAS = [
     'minimo',             # siempre ~0.02: todas las ventanas empiezan en la linea base
     'energia',            # repite a la media (es casi media al cuadrado)
     'duracion',           # ~196 en todas: la pieza se queda encima toda la ventana
+    'f_dominante',        # salta entre 0.25 y 9 Hz sin patron: es ruido, no fisica
+    'centroide',          # ~7.2 Hz en las tres clases: no separa
+    'energia_espectral',  # = banda_baja + banda_alta, informacion repetida
+    'banda_baja',         # es el escalon del peso: repite a la media
 ]
 
 
@@ -31,6 +40,14 @@ def calcular_features(x):
     # propias del dominio: el peso ya asentado y cuanto se pasa el golpe de ese peso
     fila['meseta'] = np.median(x[len(x) // 2:])
     fila['sobrepaso'] = fila['maximo'] - fila['meseta']
+    # ---- frecuencia (semana 6) ----
+    espectro = np.abs(np.fft.rfft(x))[1:]
+    frecuencias = np.fft.rfftfreq(len(x), 1 / FS)[1:]
+    fila['f_dominante'] = frecuencias[np.argmax(espectro)]
+    fila['centroide'] = np.sum(frecuencias * espectro) / np.sum(espectro)
+    fila['energia_espectral'] = np.sum(espectro ** 2)
+    fila['banda_baja'] = np.sum(espectro[frecuencias < BANDA_CORTE] ** 2)
+    fila['banda_alta'] = np.sum(espectro[frecuencias >= BANDA_CORTE] ** 2)
     return fila
 
 
@@ -88,4 +105,34 @@ if __name__ == '__main__':
                                figsize=(12, 12), diagonal='hist', alpha=0.8)
     plt.savefig('figuras/scatter_matrix.png', dpi=100)
 
-    print("Figuras: features.png, scatter_matrix.png")
+    # Espectro de una ventana por clase (figuras/espectro.png) y promedio por clase
+    fig, (a1, a2) = plt.subplots(1, 2, figsize=(12, 4))
+    for c in clases:
+        ventanas = datos[datos['etiqueta'] == c].pivot(index='t', columns='ventana', values='valor')
+        ventanas = ventanas.ffill().bfill()
+        fr = np.fft.rfftfreq(len(ventanas), 1 / FS)[1:]
+        esp = np.abs(np.fft.rfft(ventanas.values, axis=0))[1:]
+        a1.plot(fr, esp[:, 0], label=c, color=colores[c])
+        a2.plot(fr, esp.mean(axis=1), label=c, color=colores[c])
+    for a, titulo in ((a1, 'Una ventana por clase'), (a2, 'Promedio por clase')):
+        a.axvline(BANDA_CORTE, color='k', ls='--', lw=1)
+        a.set_yscale('log')
+        a.set_xlabel('frecuencia (Hz)')
+        a.set_title(titulo)
+        a.grid(alpha=0.3)
+        a.legend()
+    a1.set_ylabel('magnitud')
+    plt.tight_layout()
+    plt.savefig('figuras/espectro.png', dpi=150)
+
+    # Una de frecuencia contra una de tiempo (figuras/frecuencia_vs_tiempo.png)
+    plt.figure(figsize=(6, 5))
+    for c, g in features.groupby('etiqueta'):
+        plt.scatter(g['meseta'], g['banda_alta'], label=c, color=colores[c])
+    plt.xlabel('meseta (tiempo)')
+    plt.ylabel(f'energia de {BANDA_CORTE:.0f} a 25 Hz (frecuencia)')
+    plt.legend()
+    plt.grid(alpha=0.3)
+    plt.tight_layout()
+    plt.savefig('figuras/frecuencia_vs_tiempo.png', dpi=150)
+    print("Figuras: features.png, scatter_matrix.png, espectro.png, frecuencia_vs_tiempo.png")

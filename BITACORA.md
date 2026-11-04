@@ -186,7 +186,44 @@ La meseta (PLA 0.20, resina 0.54, MDF 0.72, con desviaciones de 0.01 a 0.03). S�
 ¿Recapturaste?
 No hizo falta.
 
+## Semana 6 - Características en el dominio de la frecuencia (U2)
 
+Bloque 1
+
+Tu frecuencia de muestreo fs.
+fs = 50 Hz (200 muestras en 4 s, una cada 20 ms).
+
+Tu frecuencia de Nyquist y qué significa.
+25 Hz. No puedo ver nada que oscile más rápido que 25 Hz; si apareciera, sería aliasing.
+
+Tu resolución Δf.
+Δf = fs/N = 50/200 = 0.25 Hz.
+
+¿Esperas que tus clases se distingan en frecuencia?
+Poco. Mi señal es casi un escalón (cae y se queda), así que casi toda la energía está en frecuencias bajas. Quizá solo aporte el rebote del golpe (6 a 9 Hz).
+
+Bloque 2
+
+Frecuencia dominante y si tiene sentido físico.
+Salta entre 0.25 y 9 Hz sin patrón por clase; no tiene sentido físico porque el espectro de un escalón no tiene un pico claro.
+
+¿Las features de frecuencia separan tus clases?
+El centroide no (≈7.2 Hz en las tres). La energía total y la banda baja sí, pero solo porque repiten el peso. La banda alta (3–25 Hz) sí aporta algo nuevo: la energía del rebote (PLA ≈ 9, resina ≈ 55, MDF ≈ 106). Elegí el corte en 3 Hz viendo mis espectros.
+
+¿Te las quedas o las quitas?
+Me quedo solo con banda_alta; quito frecuencia dominante, centroide, energía total y banda baja (están en DESCARTADAS).
+
+### Avance del proyecto
+
+¿La frecuencia te sirvió? Explicación física.
+Poco, como predije: la señal es un escalón y lo que distingue a mis piezas es el peso. Solo la banda alta agrega el golpe.
+
+Lista final de características para la semana 7.
+media, desv, máximo, rango, meseta, sobrepaso, banda_alta.
+Dataset congelado, versión 1: 7 características, 120 ventanas, 40 por clase.
+
+Predicción de separación con el conjunto final.
+Las tres clases se van a separar casi perfecto, porque la meseta ya no se encima.
 
 Ya logre hacer push en GitHub
 

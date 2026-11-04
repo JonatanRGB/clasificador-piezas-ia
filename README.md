@@ -25,3 +25,6 @@ En esta semana limpié los datos. Primero quité las lecturas que eran imposible
 
 ## Semana 5
 En esta semana saqué las características de cada ventana, o sea, unos cuantos números que resumen la señal en lugar de usar las 200 muestras. Me quedé con la media, la desviación, el máximo, el rango, la meseta (el peso cuando ya se estabilizó) y el sobrepaso (cuánto se pasa el golpe del peso final). Quité el mínimo, la energía y la duración porque salían casi iguales en los tres materiales. La que mejor separa es la meseta, porque es prácticamente el peso.
+
+## Semana 6
+En esta semana revisé la señal en frecuencia con la FFT. Muestreo a 50 Hz, así que lo más rápido que puedo ver son 25 Hz. Como la señal es casi un escalón (cae y se queda), la frecuencia casi no ayudó. Solo me quedé con la energía de 3 a 25 Hz, que viene del rebote cuando cae la pieza. Al final quedaron 7 características y dejé el archivo `datos/features.csv` como versión final (120 ventanas, 40 de cada material).
