@@ -147,6 +147,46 @@ Revisaría cómo suelto la pieza (altura, posición) y repetiría esas capturas;
 
 Realice pruebas en la maquina de desgaste del laboratorio de superficies y triboligia, debido a que alli es donde empece a trabajar con un sistema parecido al que estoy trabajando actualmente co esta celda de carga
 
+## Semana 5 - Características en el dominio del tiempo (U2)
+
+Bloque 1
+
+| Característica | Por qué debería distinguir mis clases |
+|---|---|
+| media | Es casi el peso promedio de la ventana: 14, 40 y 55 g son muy distintos |
+| desv | La caída y el rebote mueven más la señal en piezas más pesadas |
+| máximo | El pico al caer: 22, 50 y 68 g |
+| rango | Máximo menos mínimo; no le afecta la línea base |
+| meseta (propia) | El peso ya asentado (mediana de la segunda mitad de la ventana) |
+| sobrepaso (propia) | Cuánto se pasa el golpe del peso final (máximo − meseta) |
+| mínimo, energía, duración | Las calculo, pero espero que no sirvan |
+
+Predicción: ¿cuál será la mejor y cuál la más inútil?
+La mejor será la meseta (es el peso directo) y la más inútil la duración, porque la pieza se queda encima toda la ventana.
+
+Bloque 2
+
+¿Cuántas filas y columnas tiene features.csv y por qué? 
+ 120 filas (una por ventana: 40 x 3 materiales) y 8 columnas (ventana, 6 características y etiqueta).
+
+¿Qué par de características separa mejor tus clases?
+Meseta contra sobrepaso: la meseta separa sola los tres materiales y el sobrepaso agrega cómo cayó la pieza. También probé media–rango y máximo–desv; también separan porque todas dependen del peso.
+
+¿Hay clases encimadas? ¿Qué harás?
+No hay clases encimadas.
+
+### Avance del proyecto
+Qué características quedaron y cuáles descartaste, con razones.
+Quedaron: media, desv, máximo, rango, meseta y sobrepaso.
+ mínimo (≈0.02 en todas: todas empiezan en la base), energía (repite a la media, es casi media²) y duración (≈196 de 200 en todas). Están en la lista DESCARTADAS de features.py.
+
+¿Cuál separa mejor? ¿Coincide con tu predicción?
+La meseta (PLA 0.20, resina 0.54, MDF 0.72, con desviaciones de 0.01 a 0.03). Sí coincidió, y la duración no sirvió, como predije.
+
+¿Recapturaste?
+No hizo falta.
+
+
 
 Ya logre hacer push en GitHub
 
