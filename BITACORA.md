@@ -302,6 +302,8 @@ Tabla de acciones (carácter, clase, efecto físico, justificación).
 ¿Cómo evitas que el bucle procese distinto que el entrenamiento?
 Convertí limpiar.py y features.py en funciones (limpiar_ventana y calcular_features) que control.py importa. Así el bucle limpia exactamente igual (evita el training-serving skew). Comprobé que datos_limpios.csv sale idéntico que antes del cambio.
 
+link del video: https://drive.google.com/file/d/1sZ3g2q0XMKZx1mSm2Lg9XinVb8rDgkI-/view?usp=sharing 
+
 ### Avance del proyecto
 Tabla de acciones.   (la misma de arriba)
 Exactitud en vivo contra la del CSV. 95%
