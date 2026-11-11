@@ -1,4 +1,4 @@
-# Clasificador de piezas - Material
+# Clasificador de piezas - Peso
 
 Proyecto del curso Inteligencia Artificial.
 
@@ -6,11 +6,11 @@ Proyecto del curso Inteligencia Artificial.
 - Código: 219400751
 - Dominio: Clasificación automática de piezas por peso utilizando una celda de carga con módulo de amplificación HX711 y un microcontrolador Arduino.
 
-El proyecto recolecta mediciones de peso en masa de distintas piezas para categorizarlas en tres rangos de clasificación: **Bajo**, **Medio** y **Alto**.
+El proyecto recolecta mediciones de peso en masa de distintas piezas para categorizarlas en tres rangos de clasificación: **ligero** (~14 g), **mediano** (~40 g) y **pesado** (~55 g).
 
 ## Descripción
 
-sistema que lee señales mediante peso, las cuales clasifican las señales del sensor en tres diferentes de categorias, las cuales son Alto (para alto peso), mediano y bajo, y esto nos ayuda a poder calcular el peso del contenido de los elementos que deseamos pesar para la tabla.
+sistema que lee señales mediante peso, las cuales clasifican las señales del sensor en tres diferentes de categorias, las cuales son ligero, mediano y pesado, y esto nos ayuda a poder calcular el peso del contenido de los elementos que deseamos pesar para la tabla.
 
 ## Semana 2
 
@@ -34,3 +34,5 @@ En esta semana entrené el clasificador. Separé 90 ventanas para entrenar y 30 
 
 ## Semana 8
 En esta semana comparé el árbol con dos redes neuronales (de 10 y de 50 neuronas). Las tres acertaron el 100 %, así que me quedé con el árbol porque es más simple. También hice el bucle de control: el Arduino manda el peso, Python decide qué material es y le contesta con una letra para prender un LED: rojo para resina (A), amarillo para MDF (B) y azul para PLA (C).
+
+Después cambié las etiquetas de material (resina, MDF, PLA) a etiquetas de peso: **ligero**, **mediano** y **pesado**, porque mi celda de carga mide gramos, no material. Ahora las letras son A = ligero (LED rojo), B = mediano (LED amarillo) y C = pesado (LED azul). La explicación está en la bitácora.

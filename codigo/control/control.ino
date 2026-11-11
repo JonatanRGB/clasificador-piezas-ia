@@ -1,16 +1,16 @@
 // Bucle de control (semana 8)
 // Manda el peso cada 20 ms (50 Hz) y obedece las ordenes de Python con 3 LEDs:
-//   A = resina -> LED ROJO
-//   B = mdf    -> LED AMARILLO
-//   C = pla    -> LED AZUL
+//   A = ligero  (~14 g) -> LED ROJO
+//   B = mediano (~40 g) -> LED AMARILLO
+//   C = pesado  (~55 g) -> LED AZUL
 //   0 = reposo -> todo apagado
 #include "HX711.h"
 
 const int DOUT_PIN = A1;
 const int CLK_PIN = A0;
-const int LED_ROJO = 5;       // resina
-const int LED_AMARILLO = 6;   // mdf
-const int LED_AZUL = 7;       // pla
+const int LED_ROJO = 5;       // ligero
+const int LED_AMARILLO = 6;   // mediano
+const int LED_AZUL = 7;       // pesado
 
 const unsigned long PERIODO_MS = 20;   // una lectura cada 20 ms = 50 Hz (HX711 en modo 80 SPS)
 

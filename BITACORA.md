@@ -317,3 +317,24 @@ este es el procedimiento para hacer push:
 - luego git commit
 - luego git push
 
+## Semana 8 - Cambio de etiquetas: de material a peso
+
+Mi celda de carga mide **peso (gramos), no material**. Por eso cambié las etiquetas de mis datos de resina, MDF y PLA a categorías de peso, sin volver a capturar nada:
+
+| Antes | Peso real en mis datos (mediana de la 2.ª mitad de la ventana) | Ahora |
+|---|---|---|
+| pla | 14.1 g (12.7 a 15.8 g) | **ligero** |
+| resina | 40.3 g (37.0 a 44.7 g) | **mediano** |
+| mdf | 54.6 g (49.9 a 59.1 g) | **pesado** |
+
+**Por qué lo cambié:**
+- Con etiquetas de material, el modelo diría "resina" a cualquier pieza de ~40 g, aunque fuera de otro material. Estaría usando el peso como si fuera el material (fuga de información): funcionaría solo mientras cada material tenga un peso distinto.
+- En el proyecto integrador, el dominio de **material** ya lo cubre otro integrante, y la regla es que cada uno tenga una categoría distinta. Mi dominio es **peso**.
+
+**Qué cambió y qué no:**
+- El archivo original quedó guardado como `datos/datos_v1_material.csv`; en `datos/datos.csv` solo cambió la columna `etiqueta`.
+- Siguen siendo 120 ventanas, 40 por clase. La limpieza, la normalización y las características son idénticas (diferencia máxima 0.0); solo cambió la etiqueta.
+- Volví a entrenar el mismo árbol de decisión (`max_depth=3`). Exactitud en prueba: **100 %** (30 de 30). Matriz de confusión: ligero 10/10, mediano 10/10 y pesado 10/10.
+- La partición de entrenamiento y prueba cambió un poco (12 de las 30 ventanas de prueba son las mismas de antes), porque con nombres nuevos las clases quedan en otro orden al estratificar. Por eso ahora el kNN también salió en 100 % (antes 96.7 %).
+- En `control.py`: A = ligero (LED rojo), B = mediano (LED amarillo), C = pesado (LED azul).
+

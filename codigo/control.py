@@ -24,9 +24,9 @@ BAUDIOS = 115200
 N_MUESTRAS = 200         # 4 s a 50 Hz, igual que en adquirir.py
 
 ordenes = {
-    'resina': b'A',      # LED rojo
-    'mdf': b'B',         # LED amarillo
-    'pla': b'C',         # LED azul
+    'ligero': b'A',      # LED rojo     (~14 g)
+    'mediano': b'B',     # LED amarillo (~40 g)
+    'pesado': b'C',      # LED azul     (~55 g)
 }
 
 
