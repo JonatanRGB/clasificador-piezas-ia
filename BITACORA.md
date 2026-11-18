@@ -355,4 +355,34 @@ Bloque 2
 - **¿Las clases se separan solas?** Sí: ligero, mediano y pesado forman tres grupos a lo largo de PC1 sin que PCA conozca las etiquetas. Eso quiere decir que la separación es real y no la inventó el clasificador.
 - **Puntos atípicos:** las ventanas más alejadas del centro de su grupo son tres de la clase pesado: la 7 (el golpe más fuerte, con un pico de unos 80 g) y la 22 y la 76 (casi sin golpe, como si la pieza se hubiera apoyado en lugar de caer). Al ver su señal no son errores, son distintas formas de caer.
 
+## Semana 11 - Agrupamiento: K-Means y DBSCAN (U3)
+
+Bloque 1
+
+Tabla cruzada de K-Means (k = 3):
+
+```
+etiqueta   grupo 0  grupo 1  grupo 2
+ligero          40        0        0
+mediano          0        0       40
+pesado           0       34        6
+```
+
+- **¿K-Means encontró mis clases?** Casi: ligero y mediano quedaron completos, y solo 6 ventanas de pesado se fueron al grupo de mediano. Eso dice que mis clases sí son grupos naturales de los datos.
+- **¿Qué separó en su lugar?** Las 6 ventanas de pesado que se fueron con mediano son las que cayeron con menos golpe (sobrepaso de 0.02 a 0.10, cuando el promedio es 0.15). K-Means mide la distancia al centro de cada grupo, y la clase pesado es la más dispersa, así que sus orillas quedan más cerca del centro de mediano.
+- **Figura en 3D:** para ver los grupos usé PCA con 3 componentes: PC1 = 89.9 %, PC2 = 8.5 % y PC3 = 1.3 % de la varianza (99.7 % en total). Cada eje de `figuras/clustering.png` dice su porcentaje. PC3 casi no agrega información, pero en 3D se ve mejor que los 6 de pesado quedan en la orilla, del lado de mediano.
+
+Bloque 2
+
+| eps | grupos | ruido |
+|---|---|---|
+| 0.5 | 4 | 32 |
+| 0.8 | 3 | 8 |
+| **1.0** | **3** | **0** |
+| 1.2 | 2 | 0 |
+| 1.5 | 2 | 0 |
+
+- **eps elegido: 1.0** (con `min_samples = 5`). Es el más chico que encuentra 3 grupos sin dejar ruido; con 1.2 ya junta mediano y pesado en un solo grupo.
+- **¿Cuántos grupos encontró DBSCAN sin decírselo?** 3, y coinciden exactamente con ligero, mediano y pesado (mejor que K-Means).
+- **Piezas raras marcadas como ruido: 0 de 9.** Ninguna quedó como ruido: son ligeras y quedan pegadas al grupo ligero, así que DBSCAN las absorbe dentro de ese grupo.
 
