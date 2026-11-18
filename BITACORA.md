@@ -338,3 +338,21 @@ Mi celda de carga mide **peso (gramos), no material**. Por eso cambié las etiqu
 - La partición de entrenamiento y prueba cambió un poco (12 de las 30 ventanas de prueba son las mismas de antes), porque con nombres nuevos las clases quedan en otro orden al estratificar. Por eso ahora el kNN también salió en 100 % (antes 96.7 %).
 - En `control.py`: A = ligero (LED rojo), B = mediano (LED amarillo), C = pesado (LED azul).
 
+## Semana 10 - Aprendizaje no supervisado y PCA (U3)
+
+> Las piezas raras de esta semana son simuladas con `codigo/generar_anomalias.py`, con la misma autorización del profesor que el resto de mis datos (el HX711 está dañado).
+
+### Antes de la clase
+Bloque 1
+
+1. **¿Cuántas características tengo y por qué es difícil verlas?** `features.csv` tiene 7 características (media, desv, máximo, rango, meseta, sobrepaso y banda_alta). No puedo graficar 7 dimensiones a la vez, solo pares, así que nunca veo todo junto.
+2. **¿Qué haría mi sistema con algo que no es ninguna de mis clases?** El árbol siempre termina en una hoja, así que contestaría ligero, mediano o pesado con confianza 1.0. Por ejemplo, un tornillo de 8 g pesa menos que cualquier pieza ligera que conozco (12.7 a 15.8 g), pero el árbol igual diría "ligero". No sabe decir "esto no lo conozco".
+3. **¿Qué busca PCA?** Busca las direcciones en las que más cambian mis datos y las usa como nuevos ejes. Así puedo ver las 7 características en una gráfica de 2 dimensiones perdiendo lo menos posible de información. No usa las etiquetas.
+
+Bloque 2
+
+- **Varianza explicada:** PC1 = 89.9 % y PC2 = 8.5 %, en total **98.4 %**. PC1 es básicamente el peso: todas las características pesan alrededor de 0.4 en ella. PC2 es casi solo el sobrepaso (peso 0.92), o sea, qué tan fuerte fue el golpe al caer.
+- **¿Las clases se separan solas?** Sí: ligero, mediano y pesado forman tres grupos a lo largo de PC1 sin que PCA conozca las etiquetas. Eso quiere decir que la separación es real y no la inventó el clasificador.
+- **Puntos atípicos:** las ventanas más alejadas del centro de su grupo son tres de la clase pesado: la 7 (el golpe más fuerte, con un pico de unos 80 g) y la 22 y la 76 (casi sin golpe, como si la pieza se hubiera apoyado en lugar de caer). Al ver su señal no son errores, son distintas formas de caer.
+
+
